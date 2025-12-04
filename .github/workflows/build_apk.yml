@@ -23,6 +23,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install flet pandas gspread google-auth openpyxl Pillow
 
+    - name: Create Google credentials file
+      run: |
+        echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > ProductoTerminado.json
+      working-directory: .
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:

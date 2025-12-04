@@ -33,8 +33,8 @@ Abre **PowerShell** en la carpeta de tu proyecto (`warehouse_flet_app`) y ejecut
 git init
 
 # 2. Configurar tu usuario (cambia los datos por los tuyos)
-git config --global user.name "Tu Nombre"
-git config --global user.email "tu@email.com"
+git config --global user.name "eperulles"
+git config --global user.email "erickperulles@gmail.com"
 
 # 3. Preparar los archivos
 git add .
@@ -45,7 +45,7 @@ git commit -m "Primera versión de la app"
 # 5. Conectar con GitHub (¡IMPORTANTE!)
 # Copia el comando que te dio GitHub en la página del repositorio.
 # Se verá algo así (REEMPLAZA CON TU URL):
-git remote add origin https://github.com/TU_USUARIO/warehouse-app.git
+git remote add origin https://github.com/eperulles/warehouse-app.git
 
 # 6. Subir el código
 git branch -M main
