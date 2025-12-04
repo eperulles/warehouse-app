@@ -170,6 +170,21 @@ class WarehouseApp:
             self.status_bar.color = color
         self.page.update()
     
+    def show_alert(self, title: str, message: str):
+        """Muestra un diálogo de alerta al usuario."""
+        def close_dialog(e):
+            dialog.open = False
+            self.page.update()
+        
+        dialog = ft.AlertDialog(
+            title=ft.Text(title),
+            content=ft.Text(message),
+            actions=[ft.TextButton("OK", on_click=close_dialog)],
+        )
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+    
     def show_config_view(self):
         """Muestra la vista de configuración."""
         self.update_status("📋 Configuración del sistema")
@@ -277,42 +292,6 @@ class WarehouseApp:
                 border_radius=5
             )
         ]
-        
-        self.page.update()
-    
-    def load_google_sheets(self, url: str):
-        """Carga datos desde Google Sheets."""
-        if not url:
-            self.update_status("❌ Ingresa una URL", "red")
-            return
-        
-        self.update_status("🔄 Cargando datos de Google Sheets...", ft.colors.ORANGE)
-        
-        try:
-            sheet_id = self.sheets.extract_sheet_id(url)
-            if not sheet_id:
-                self.update_status("❌ URL inválida", ft.colors.RED)
-                return
-            
-            df, header_row, sheet = self.sheets.load_shipment_data(sheet_id)
-            
-            if df is not None:
-                self.shipment_df = df
-                self.header_row = header_row
-                self.sheet = sheet
-                self.update_status(f"✅ Datos cargados: {len(df)} camiones", ft.colors.GREEN)
-                self.show_config_view()  # Refresh para mostrar info actualizada
-            else:
-                self.update_status("❌ Error cargando datos", ft.colors.RED)
-        
-        except Exception as e:
-            self.update_status(f"❌ Error: {str(e)}", ft.colors.RED)
-    
-    def load_svg_file(self, e: ft.FilePickerResultEvent):
-        """Carga un archivo SVG/XML."""
-        if not e.files:
-            return
-        
         self.update_status("🔄 Cargando layout SVG...", ft.colors.ORANGE)
         
         try:
