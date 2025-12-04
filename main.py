@@ -19,15 +19,25 @@ else:
     # Running from source
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# --- PATCH FOR ANDROID: Mock wsgiref ---
-# Android Python environment often lacks wsgiref, but google-auth-oauthlib imports it.
+# --- PATCH FOR ANDROID: Mock wsgiref completely ---
+# Android Python environment lacks wsgiref, but google-auth-oauthlib imports it.
 # Since we use Service Account (not interactive login), we can mock it to prevent crash.
 try:
     import wsgiref
 except ImportError:
     from unittest.mock import MagicMock
-    sys.modules["wsgiref"] = MagicMock()
-    sys.modules["wsgiref.simple_server"] = MagicMock()
+    import types
+    
+    # Create a proper module mock
+    wsgiref_mock = types.ModuleType('wsgiref')
+    wsgiref_mock.simple_server = MagicMock()
+    wsgiref_mock.util = MagicMock()
+    wsgiref_mock.headers = MagicMock()
+    
+    sys.modules["wsgiref"] = wsgiref_mock
+    sys.modules["wsgiref.simple_server"] = wsgiref_mock.simple_server
+    sys.modules["wsgiref.util"] = wsgiref_mock.util
+    sys.modules["wsgiref.headers"] = wsgiref_mock.headers
 # ---------------------------------------
 
 # Importar módulos core
