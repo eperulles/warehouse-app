@@ -26,6 +26,25 @@ class SheetsManager:
             credentials_file: Ruta al archivo JSON de credenciales de Google
         """
         self.credentials_file = credentials_file
+        self.client = None
+        self._initialize_client()
+    
+    def _initialize_client(self):
+        """Inicializa el cliente de Google Sheets."""
+        try:
+            import os
+            if not os.path.exists(self.credentials_file):
+                print(f"⚠️ Archivo de credenciales no encontrado: {self.credentials_file}")
+                print("   Google Sheets no estará disponible.")
+                self.client = None
+                return
+                
+            creds = Credentials.from_service_account_file(
+                self.credentials_file,
+                scopes=SCOPE
+            )
+            self.client = gspread.authorize(creds)
+            print("✅ Cliente de Google Sheets inicializado")
         except Exception as e:
             print(f"❌ Error inicializando Google Sheets: {e}")
             self.client = None
